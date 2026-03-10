@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para Natalia</title>
+    <style>
+        :root {
+            --mar-oscuro: #001219;
+            --mar-medio: #005f73;
+            --mar-claro: #94d2bd;
+            --texto: #003049;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0; padding: 0;
+            background: var(--mar-oscuro);
+            color: white;
+            font-family: 'serif', 'Georgia', 'Times New Roman';
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ocean-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, #00212e 0%, #001219 100%);
+            z-index: -1;
+        }
+
+        /* PANTALLA DE INICIO AUTOMÁTICA */
+        #intro-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--mar-oscuro);
+            z-index: 2000;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center;
+            transition: opacity 1s ease;
+        }
+
+        .sweet-text {
+            color: var(--mar-claro);
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+            padding: 0 25px;
+            line-height: 1.5;
+            animation: softPulse 2s infinite;
+        }
+
+        @keyframes softPulse { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.02); } }
+
+        /* CONTENEDOR PRINCIPAL */
+        #stage {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        /* SOBRE QUE SE DESVANECE */
+        .envelope {
+            position: absolute;
+            width: 280px;
+            height: 180px;
+            background: var(--mar-medio);
+            border-radius: 8px;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.2s ease;
+        }
+
+        .envelope::after {
+            content: "♥";
+            color: var(--mar-claro);
+            font-size: 2.2rem;
+            filter: drop-shadow(0 0 5px rgba(148, 210, 189, 0.5));
+        }
+
+        /* LA CARTA */
+        .letter {
+            position: absolute;
+            width: 88%;
+            max-width: 330px;
+            background: #fdfcf0;
+            padding: 35px 25px;
+            color: var(--texto);
+            text-align: center;
+            border-radius: 4px;
+            opacity: 0;
+            transform: scale(0.9) translateY(10px);
+            transition: opacity 1.5s ease 0.8s, transform 1.5s ease 0.8s;
+            z-index: 50;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+        }
+
+        /* ACTIVACIÓN AUTOMÁTICA */
+        .activated .envelope {
+            transform: translateX(-180%) rotate(-15deg);
+            opacity: 0;
+        }
+
+        .activated .letter {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* TICKET */
+        .ticket {
+            margin-top: 25px;
+            border: 1.5px dashed var(--mar-medio);
+            padding: 15px;
+            background: #fff;
+            border-radius: 4px;
+        }
+
+        /* BURBUJAS */
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: rise linear infinite;
+        }
+
+        @keyframes rise {
+            from { transform: translateY(110vh); opacity: 0; }
+            to { transform: translateY(-10vh); opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ocean-bg"></div>
+
+    <div id="intro-screen">
+        <p class="sweet-text">Tengo algo para ti natti linda...</p>
+    </div>
+
+    <div id="stage">
+        <div class="envelope" id="env"></div>
+        
+        <div class="letter">
+            <p style="margin: 0; font-size: 1.2rem; font-style: italic;">Para Nattii</p>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+            
+            <p style="font-size: 1rem; line-height: 1.6;">
+                Hemos tenido muchas complicaciones, pero no dudes ni un segundo que te amo.
+            </p>
+            
+            <p style="font-size: 0.9rem; color: #ae2012; margin: 15px 0; font-weight: bold;">
+                Feliz 8 de marzo y 12 adelantado.
+            </p>
+
+            <div class="ticket">
+                <p style="margin: 0; font-size: 0.6rem; letter-spacing: 2px; color: #999;">GIFT CARD</p>
+                <p style="margin: 10px 0; font-size: 1.2rem; font-weight: bold; color: var(--mar-medio);">VALE POR UNA CITA</p>
+                <p style="margin: 0; font-size: 0.8rem; color: #666;">Válido para siempre</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const intro = document.getElementById('intro-screen');
+        const stage = document.getElementById('stage');
+
+        // Al cargar la página, esperar 5 segundos
+        window.onload = () => {
+            setTimeout(() => {
+                // Desvanecer intro y mostrar escenario
+                intro.style.opacity = '0';
+                
+                setTimeout(() => {
+                    intro.style.display = 'none';
+                    stage.style.display = 'flex';
+                    
+                    // Pequeño delay para que el stage aparezca suavemente
+                    setTimeout(() => {
+                        stage.style.opacity = '1';
+                        createBubbles();
+                        
+                        // Activar la animación de la carta automáticamente
+                        setTimeout(() => {
+                            stage.classList.add('activated');
+                        }, 1000);
+                    }, 100);
+                }, 1000);
+
+            }, 5000); // 5 SEGUNDOS DE ESPERA
+        };
+
+        function createBubbles() {
+            setInterval(() => {
+                const b = document.createElement('div');
+                b.className = 'bubble';
+                const size = Math.random() * 10 + 4;
+                b.style.width = size + 'px';
+                b.style.height = size + 'px';
+                b.style.left = Math.random() * 100 + 'vw';
+                b.style.animationDuration = Math.random() * 5 + 4 + 's';
+                document.body.appendChild(b);
+                setTimeout(() => b.remove(), 8000);
+            }, 600);
+        }
+    </script>
+</body>
+</html>
